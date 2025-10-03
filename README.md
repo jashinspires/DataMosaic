@@ -66,23 +66,49 @@ This hybrid approach reduces LLM usage (cutting cost) while retaining flexibilit
 6. Merge LLM + Regex results → Post-validate with embeddings  
 7. Store result (CSV / DB) + UI display  
 
-**Mermaid diagram:**
-
-```mermaid
-flowchart TB
-    A[User Uploads File / Specifies Schema]
-    B[File Processing (PDF/DOC/TXT/OCR)]
-    C[Text Segmentation / Chunking]
-    D[Regex Extraction]
-    E{Regex success?}
-    F[Embeddings: select relevant chunks]
-    G[LLM Fallback (Groq / Mistral)]
-    H[Merge + Post-validate with embeddings]
-    I[Store result (CSV/DB) + UI display]
-
-    A --> B --> C --> D --> E
-    E -- Yes --> H --> I
-    E -- No --> F --> G --> H
++-------------------------------+
+| User Uploads File / Schema |
++---------------+---------------+
+|
+v
++---------------+---------------+
+| File Processing (PDF/DOC/TXT)|
++---------------+---------------+
+|
+v
++---------------+---------------+
+| Text Segmentation / Chunking |
++---------------+---------------+
+|
+v
++---------------+---------------+
+| Regex Extraction |
++---------------+---------------+
+| Yes / No
+|
++----+----+
+| |
+Yes No
+| |
+v v
++---------------+ +-------------------------+
+| Merge + | | Embeddings: select |
+| Post-validate | | relevant chunks |
+| with LLM | +-----------+-------------+
++-------+-------+ |
+| v
++---------------------> LLM Fallback
+|
+v
++--------+--------+
+| Merge + Post- |
+| validate results|
++--------+--------+
+|
+v
++--------+--------+
+| Store CSV/DB + UI|
++-----------------+
 
 ***
 
