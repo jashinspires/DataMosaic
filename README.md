@@ -4,7 +4,7 @@ AI-powered hybrid pipeline that converts unstructured documents into clean, stru
 
 DataMosaic is a full-stack, production-minded project that extracts columns/fields from messy text/PDF/DOC files. It prioritizes deterministic methods (regex), falls back to LLMs (Groq / Mistral) only when needed, and uses sentence-transformers plus OpenAI nomadic-text embeddings to improve accuracy, validation, and ranking.
 
----
+***
 
 ## Table of Contents
 - [Why DataMosaic?](#why-datamosaic)
@@ -28,7 +28,7 @@ DataMosaic is a full-stack, production-minded project that extracts columns/fiel
 - [Contributing](#contributing)
 - [License & Credits](#license--credits)
 
----
+***
 
 ## Why DataMosaic?
 Many teams face a recurring problem: mission-critical information sits locked in messy documents (reports, bank statements, police reports, emails). DataMosaic solves this by combining three approaches into a single pipeline for accuracy, speed, and cost-effectiveness:
@@ -39,7 +39,7 @@ Many teams face a recurring problem: mission-critical information sits locked in
 
 This hybrid approach reduces LLM usage (cutting cost) while retaining flexibility and accuracy for real-world documents.
 
----
+***
 
 ## Highlights / Features
 - User-defined schema: upload files, specify column names (e.g., Name, DOB, Amount, CaseID) and get a filled table
@@ -50,42 +50,38 @@ This hybrid approach reduces LLM usage (cutting cost) while retaining flexibilit
 - Modern full-stack: FastAPI backend + React + Tailwind frontend skeleton included
 - Logging, confidence scoring, and human-in-the-loop corrections support (trainer UI planned)
 
----
+***
 
 ## Architecture (Overview)
 
 Flow:
 
-1) User Uploads File / Specifies Schema
-2) File Processing (PDF/DOC/TXT/OCR)
-3) Text Segmentation / Chunking
-4) Regex Extraction (fast)
-   - If success → Map to columns & return
-   - If not → Select relevant chunks via embeddings (all-mini-lm-v6)
-5) LLM Fallback (Groq / Mistral)
-6) Merge LLM + Regex results → Post-validate with embeddings
+1) User Uploads File / Specifies Schema  
+2) File Processing (PDF/DOC/TXT/OCR)  
+3) Text Segmentation / Chunking  
+4) Regex Extraction (fast)  
+   - If success → Map to columns & return  
+   - If not → Select relevant chunks via embeddings (all-mini-lm-v6)  
+5) LLM Fallback (Groq / Mistral)  
+6) Merge LLM + Regex results → Post-validate with embeddings  
 7) Store result (CSV / DB) + UI display
 
 Mermaid diagram:
 
 ```mermaid
 flowchart TB
-    A[User Uploads File / Specifies Schema]
-    B[File Processing (PDF/DOC/TXT/OCR)]
-    C[Text Segmentation / Chunking]
-    D[Regex Extraction]
-    E{Regex success?}
-    F[Embeddings: select relevant chunks]
-    G[LLM Fallback (Groq / Mistral)]
-    H[Merge + Post-validate with embeddings]
-    I[Store result (CSV/DB) + UI display]
-
-    A --> B --> C --> D --> E
-    E -- Yes --> H --> I
-    E -- No --> F --> G --> H
+    A[User Uploads File / Specifies Schema] --> B[File Processing (PDF/DOC/TXT/OCR)]
+    B --> C[Text Segmentation / Chunking]
+    C --> D[Regex Extraction]
+    D --> E{Regex Success?}
+    E -- Yes --> H[Merge + Post-validate with embeddings]
+    E -- No  --> F[Embeddings: select relevant chunks]
+    F --> G[LLM Fallback (Groq / Mistral)]
+    G --> H
+    H --> I[Store result (CSV/DB) + UI display]
 ```
 
----
+***
 
 ## Quick Demo (Example Input → Output)
 
@@ -113,7 +109,7 @@ Output (CSV row):
 INV-2025-0045,2025-09-21,Rahul Sharma,+91 9876543210,12350.50
 ```
 
----
+***
 
 ## Getting Started (Local)
 
@@ -164,7 +160,7 @@ yarn dev
 
 Open http://localhost:3000 to access the UI.
 
----
+***
 
 ## Backend API (Endpoints & Examples)
 
@@ -228,7 +224,7 @@ Open http://localhost:3000 to access the UI.
      curl -o result.csv "http://localhost:8000/api/result/uuid-1234?format=csv"
      ```
 
----
+***
 
 ## Schema & LLM Prompt Examples
 
@@ -275,7 +271,7 @@ Example prompt usage notes:
 - Include a few examples (1–3) in the prompt if you want stronger guidance (few-shot), but watch token limits
 - Ask the LLM to return a confidence score per field (0–1)
 
----
+***
 
 ## Regex-first Strategy & Common Patterns
 Start with deterministic patterns for well-known fields. If a regex returns a valid result, mark as CONFIDENT and avoid LLM.
@@ -283,20 +279,20 @@ Start with deterministic patterns for well-known fields. If a regex returns a va
 Common patterns:
 ```python
 regex_patterns = {
-  "email": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+",
-  "phone_in_india": r"(?:+91[-\s]?)?[6-9]\d{9}",
+  "email": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+",
+  "phone_in_india": r"(?:\+91[-\s]?)?[6-9]\d{9}",
   "date_ddmmyyyy": r"\b(0?[1-9]|[12][0-9]|3[01])[/\-.](0?[1-9]|1[012])[/\-.]\d{4}\b",
   "invoice_id": r"\bINV[-_ ]?\d{3,7}\b",
-  "amount": r"[₹$€]?\s?[\d{1,3}(?:,\d{3})*(?:.\d+)?]+"
+  "amount": r"[₹$€]?\s?[\d{1,3}(?:,\d{3})*(?:\.\d+)?]+"
 }
 ```
 
 Algorithm:
-1) For each column, run matched relevant regex patterns from a library
-2) If match and type-valid, mark column DONE and store a confidence (regex confidence = 0.9+ by default)
-3) For missing/low-confidence columns, proceed to embeddings selection + LLM extraction
+1. For each column, run matched relevant regex patterns from a library
+2. If match and type-valid, mark column DONE and store a confidence (regex confidence = 0.9+ by default)
+3. For missing/low-confidence columns, proceed to embeddings selection + LLM extraction
 
----
+***
 
 ## Embedding + Sentence-Transformer Integration
 
@@ -321,7 +317,7 @@ top_chunks = faiss.search(q_emb, k=3)
 # send top_chunks to LLM
 ```
 
----
+***
 
 ## Token Handling & Chunking Strategy
 Goal: respect 4096 token limit (input + output) for Groq (or chosen LLM).
@@ -336,7 +332,7 @@ Output sizing:
 - Ask LLM for concise JSON (no extraneous text)
 - Set a max token output param; test empirically to avoid truncation
 
----
+***
 
 ## Testing & Sample Data
 Provide a small dataset of sample docs: receipts, invoices, police report text, bank statement snippets, and .txt versions.
@@ -350,7 +346,7 @@ Integration tests:
 - End-to-end flow: upload → extract → CSV export
 - Assert that regex-first avoids LLM calls when possible
 
----
+***
 
 ## Deployment Suggestions
 - Dockerize backend & frontend (minimal docker-compose for local run)
@@ -360,7 +356,7 @@ Integration tests:
   - Job queue (Redis + RQ / Celery) for large/async extractions
   - Metrics & cost tracking (Prometheus + Grafana or cloud monitoring)
 
----
+***
 
 ## Security, Privacy & Cost Considerations
 Security / Privacy:
@@ -374,7 +370,7 @@ Cost optimization:
 - Batch similar jobs to reuse context when possible
 - Track LLM token usage and set alerts
 
----
+***
 
 ## Roadmap & Future Improvements
 - Phase 1 (MVP)
@@ -388,7 +384,7 @@ Cost optimization:
   - Multi-language support and domain-specific templates
   - Enterprise features: auth, workspaces, audit logs
 
----
+***
 
 ## Contributing
 Contributions are welcome!
@@ -397,13 +393,13 @@ Contributions are welcome!
 - Please include tests for new features
 - Add clear descriptions for configuration changes
 
----
+***
 
 ## License & Credits
 - License: MIT (feel free to change based on your needs)
 - Credits: Many open-source projects and papers inspired the design: kor, llm-ie, ExtractThinker, ContextGem, LangExtract, and others. Hugging Face sentence-transformers and OpenAI embeddings.
 
----
+***
 
 ## Final Notes — TL;DR
 DataMosaic is a practical, production-friendly system for turning messy documents into usable tables. Its advantages are cost-efficiency (regex-first), robustness (LLM fallback), and accuracy (embeddings-guided chunk selection and post-validation). It’s a portfolio-grade project: full-stack, technically interesting, and valuable to many industries.
