@@ -54,32 +54,35 @@ This hybrid approach reduces LLM usage (cutting cost) while retaining flexibilit
 
 ## Architecture (Overview)
 
-Flow:
+**Flow:**
 
-1) User Uploads File / Specifies Schema  
-2) File Processing (PDF/DOC/TXT/OCR)  
-3) Text Segmentation / Chunking  
-4) Regex Extraction (fast)  
+1. User Uploads File / Specifies Schema  
+2. File Processing (PDF/DOC/TXT/OCR)  
+3. Text Segmentation / Chunking  
+4. Regex Extraction (fast)  
    - If success → Map to columns & return  
    - If not → Select relevant chunks via embeddings (all-mini-lm-v6)  
-5) LLM Fallback (Groq / Mistral)  
-6) Merge LLM + Regex results → Post-validate with embeddings  
-7) Store result (CSV / DB) + UI display
+5. LLM Fallback (Groq / Mistral)  
+6. Merge LLM + Regex results → Post-validate with embeddings  
+7. Store result (CSV / DB) + UI display  
 
-Mermaid diagram:
+**Mermaid diagram:**
 
 ```mermaid
 flowchart TB
-    A[User Uploads File / Specifies Schema] --> B[File Processing (PDF/DOC/TXT/OCR)]
-    B --> C[Text Segmentation / Chunking]
-    C --> D[Regex Extraction]
-    D --> E{Regex Success?}
-    E -- Yes --> H[Merge + Post-validate with embeddings]
-    E -- No  --> F[Embeddings: select relevant chunks]
-    F --> G[LLM Fallback (Groq / Mistral)]
-    G --> H
-    H --> I[Store result (CSV/DB) + UI display]
-```
+    A[User Uploads File / Specifies Schema]
+    B[File Processing (PDF/DOC/TXT/OCR)]
+    C[Text Segmentation / Chunking]
+    D[Regex Extraction]
+    E{Regex success?}
+    F[Embeddings: select relevant chunks]
+    G[LLM Fallback (Groq / Mistral)]
+    H[Merge + Post-validate with embeddings]
+    I[Store result (CSV/DB) + UI display]
+
+    A --> B --> C --> D --> E
+    E -- Yes --> H --> I
+    E -- No --> F --> G --> H
 
 ***
 
