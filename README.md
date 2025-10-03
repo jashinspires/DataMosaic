@@ -68,46 +68,33 @@ This hybrid approach reduces LLM usage (cutting cost) while retaining flexibilit
 
 **Pipeline Architecture (ASCII Version)**
 
-   +----------------------------+
-   | User Uploads File / Schema |
-   +-------------+--------------+
-                 |
-                 v
-   +-------------+--------------+
-   | File Processing (PDF/DOC)  |
-   +-------------+--------------+
-                 |
-                 v
-   +-------------+--------------+
-   | Text Segmentation / Chunk  |
-   +-------------+--------------+
-                 |
-                 v
-   +-------------+--------------+
-   |    Regex Extraction        |
-   +------+------+--------------+
-          | Yes  | No
-          v      v
-   +-------+      +-------------------------+
-   | Merge |     | Embeddings: Select     |
-   | + LLM |      | Relevant Chunks        |
-   +-------+      +-----------+-------------+
-                 | 
-                 v
-         +-------+-------+
-         |   LLM Fallback|
-         +-------+-------+
-                 |
-                 v
-         +-------+---------+
-         | Merge + Validate|
-         +-------+---------+
-                 |
-                 v
-         +-------+-------+
-         | Store CSV/DB  |
-         | + Display UI  |
-         +---------------+
+User Uploads File / Schema
+|
+v
+File Processing (PDF/DOC/TXT)
+|
+v
+Text Segmentation / Chunking
+|
+v
+Regex Extraction
+/
+Yes No
+| |
+v v
+Merge + LLM Embeddings: Select
+| Relevant Chunks
+| |
++-------+-------+
+|
+v
+LLM Fallback
+|
+v
+Merge + Validate
+|
+v
+Store CSV/DB + UI
 
 ***
 
