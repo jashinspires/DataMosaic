@@ -66,49 +66,48 @@ This hybrid approach reduces LLM usage (cutting cost) while retaining flexibilit
 6. Merge LLM + Regex results → Post-validate with embeddings  
 7. Store result (CSV / DB) + UI display  
 
-+-------------------------------+
-| User Uploads File / Schema |
-+---------------+---------------+
-|
-v
-+---------------+---------------+
-| File Processing (PDF/DOC/TXT)|
-+---------------+---------------+
-|
-v
-+---------------+---------------+
-| Text Segmentation / Chunking |
-+---------------+---------------+
-|
-v
-+---------------+---------------+
-| Regex Extraction |
-+---------------+---------------+
-| Yes / No
-|
-+----+----+
-| |
-Yes No
-| |
-v v
-+---------------+ +-------------------------+
-| Merge + | | Embeddings: select |
-| Post-validate | | relevant chunks |
-| with LLM | +-----------+-------------+
-+-------+-------+ |
-| v
-+---------------------> LLM Fallback
-|
-v
-+--------+--------+
-| Merge + Post- |
-| validate results|
-+--------+--------+
-|
-v
-+--------+--------+
-| Store CSV/DB + UI|
-+-----------------+
+**Pipeline Architecture (ASCII Version)**
+
+   +----------------------------+
+   | User Uploads File / Schema |
+   +-------------+--------------+
+                 |
+                 v
+   +-------------+--------------+
+   | File Processing (PDF/DOC)  |
+   +-------------+--------------+
+                 |
+                 v
+   +-------------+--------------+
+   | Text Segmentation / Chunk  |
+   +-------------+--------------+
+                 |
+                 v
+   +-------------+--------------+
+   |    Regex Extraction        |
+   +------+------+--------------+
+          | Yes  | No
+          v      v
+   +-------+      +-------------------------+
+   | Merge |     | Embeddings: Select     |
+   | + LLM |      | Relevant Chunks        |
+   +-------+      +-----------+-------------+
+                 | 
+                 v
+         +-------+-------+
+         |   LLM Fallback|
+         +-------+-------+
+                 |
+                 v
+         +-------+---------+
+         | Merge + Validate|
+         +-------+---------+
+                 |
+                 v
+         +-------+-------+
+         | Store CSV/DB  |
+         | + Display UI  |
+         +---------------+
 
 ***
 
