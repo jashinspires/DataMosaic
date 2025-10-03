@@ -66,35 +66,6 @@ This hybrid approach reduces LLM usage (cutting cost) while retaining flexibilit
 6. Merge LLM + Regex results → Post-validate with embeddings  
 7. Store result (CSV / DB) + UI display  
 
-**Pipeline Architecture (ASCII Version)**
-
-User Uploads File / Schema
-|
-v
-File Processing (PDF/DOC/TXT)
-|
-v
-Text Segmentation / Chunking
-|
-v
-Regex Extraction
-/
-Yes No
-| |
-v v
-Merge + LLM Embeddings: Select
-| Relevant Chunks
-| |
-+-------+-------+
-|
-v
-LLM Fallback
-|
-v
-Merge + Validate
-|
-v
-Store CSV/DB + UI
 
 ***
 
